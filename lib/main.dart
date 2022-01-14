@@ -1,92 +1,87 @@
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
+import 'package:man_page/screens/home.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+const font = "Fant Sans";
 
-class MyApp extends StatefulWidget {
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+        titleTextStyle: TextStyle(
+          fontFamily: font,
+          fontSize: 20,
+        ),
+      )),
+      home: const MyStatefulWidget(),
+    );
+  }
 }
 
-class _MyAppState extends State<MyApp> {
-  // This widget is the root of your application.
+class MyStatefulWidget extends StatefulWidget {
+  const MyStatefulWidget({Key? key}) : super(key: key);
+
+  @override
+  State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  int _selectedIndex = 1;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  final _widgetOptions = [
+    const Text(
+      'Index 1: Business',
+      style: optionStyle,
+    ),
+    HomePage(),
+    const Text(
+      'Index 2: School',
+      style: optionStyle,
+    ),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    const List<Widget> _widgetOptions = <Widget>[
-      Text(
-        'Index 0: Home',
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: _widgetOptions.elementAt(_selectedIndex),
       ),
-      Text(
-        'Index 1: Business',
-      ),
-      Text(
-        'Index 2: School',
-      ),
-      Text(
-        'Index 3: Settings',
-      ),
-    ];
-    var _currentIndex = 0;
-    void _onItemTapped(int index) {
-      setState(() {
-        _currentIndex = index;
-      });
-    }
-
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: Colors.black,
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.black,
-          iconTheme: IconThemeData(
-            color: Colors.white,
-          ),
-        ),
-      ),
-      home: Scaffold(
-        body: Center(
-          child: _widgetOptions.elementAt(_currentIndex),
-        ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(10),
-          child: SalomonBottomBar(
-            currentIndex: _currentIndex,
-            onTap: _onItemTapped,
-            items: [
-              /// Home
-              SalomonBottomBarItem(
-                icon: const Icon(Icons.home),
-                title: const Text("Home"),
-                selectedColor: Colors.purple,
-              ),
-
-              /// Likes
-              SalomonBottomBarItem(
-                icon: const Icon(Icons.favorite_border),
-                title: const Text("Likes"),
-                selectedColor: Colors.pink,
-              ),
-
-              /// Search
-              SalomonBottomBarItem(
-                icon: const Icon(Icons.search),
-                title: const Text("Search"),
-                selectedColor: Colors.orange,
-              ),
-
-              /// Profile
-              SalomonBottomBarItem(
-                icon: const Icon(Icons.person),
-                title: const Text("Profile"),
-                selectedColor: Colors.teal,
-              ),
-            ],
-          ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: SalomonBottomBar(
+          items: [
+            SalomonBottomBarItem(
+              icon: const Icon(LineIcons.thList),
+              title: const Text('Categories'),
+              selectedColor: Colors.purple,
+            ),
+            SalomonBottomBarItem(
+              icon: const Icon(LineIcons.home),
+              title: const Text('Home'),
+            ),
+            SalomonBottomBarItem(
+              icon: const Icon(LineIcons.user),
+              title: const Text('About'),
+              selectedColor: Colors.green,
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
         ),
       ),
     );
